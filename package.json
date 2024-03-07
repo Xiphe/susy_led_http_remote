@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "run-p 'build -- --watch' serve",
-    "serve": "serve dist -C -p 4000",
-    "build": "esbuild src/main.tsx --bundle --minify --sourcemap --outfile=dist/script.js"
+    "dev": "run-p 'build:dev -- --watch' serve",
+    "serve": "serve public -C -p 4000",
+    "build": "esbuild src/main.tsx --bundle --minify --sourcemap --platform=browser",
+    "build:dev": "npm run build -- --outfile=public/script.js --define:process.env.NODE_ENV=\\\"development\\\"",
+    "build:prod": "npm run build -- --outfile=dist/script.js --define:process.env.NODE_ENV=\\\"production\\\""
   },
   "author": "Hannes Diercks <node@xiphe.net> (https://xiphe.net/)",
   "license": "UNLICENSED",

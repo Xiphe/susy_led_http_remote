@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>🦄 L E D 🚌</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+  </head>
+  <body>
+    <div id="app">Loading...</div>
+    <script>
+      fetch("http://led.local/config")
+        .then((res) => res.text())
+        .then((config) => {
+          window.config = config;
+          const script = document.createElement("script");
+          script.src = "/script.js";
+          document.body.appendChild(script);
+        }, console.error);
+    </script>
+  </body>
+</html>
