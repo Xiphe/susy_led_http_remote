@@ -117,6 +117,38 @@ export function useConfig() {
   return ctx;
 }
 
+export function setStripEnabled(config: Config, strip: number, value: boolean) {
+  const nextConfig = {
+    enabledStrips1: config.enabledStrips1,
+    enabledStrips2: config.enabledStrips2,
+  } satisfies Partial<Config>;
+
+  if (strip < 8) {
+    if (value) {
+      nextConfig.enabledStrips1 |= 1 << strip;
+    } else {
+      nextConfig.enabledStrips1 &= ~(1 << strip);
+    }
+  } else if (strip < 16) {
+    if (value) {
+      nextConfig.enabledStrips2 |= 1 << (strip - 8);
+    } else {
+      nextConfig.enabledStrips2 &= ~(1 << (strip - 8));
+    }
+  }
+
+  return nextConfig;
+}
+
+export function getStripEnabled(config: Config, strip: number): boolean {
+  if (strip < 8) {
+    return (config.enabledStrips1 & (1 << strip)) !== 0;
+  } else if (strip < 16) {
+    return (config.enabledStrips2 & (1 << (strip - 8))) !== 0;
+  }
+  return false;
+}
+
 function byteConfigToObject(byteConfig: FullByteConfig) {
   const mappedConfig: Config = {} as Config;
   for (const key in CONFIG_KEYS) {
