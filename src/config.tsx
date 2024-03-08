@@ -13,10 +13,31 @@ import {
 // CONFIG KEYS
 const CONFIG_KEYS = {
   brightness: 1,
-  animation: 2,
+  animation1: 2,
+  animation2: 3,
   enabledStrips1: 10,
   enabledStrips2: 11,
   disabledStripBleed: 12,
+
+  animation1param1: 20,
+  animation1param2: 21,
+  animation1param3: 22,
+  animation1param4: 23,
+  animation1param5: 24,
+  animation1param6: 25,
+  animation1param7: 26,
+  animation1param8: 27,
+  animation1gradient: 28,
+
+  animation2param1: 30,
+  animation2param2: 31,
+  animation2param3: 32,
+  animation2param4: 33,
+  animation2param5: 34,
+  animation2param6: 35,
+  animation2param7: 36,
+  animation2param8: 37,
+  animation2gradient: 38,
 } as const;
 
 const API_URL = "http://led.local";
