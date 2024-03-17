@@ -1,38 +1,29 @@
-import { useConfig } from "./config";
+import { useConfig, PALETTE_KEYS, configKeyToName } from "./api";
 
-const PALETTES = [
-  "Custom 1",
-  "Custom 2",
-  "Rainbow Stripe",
-  "Rainbow",
-  "Party",
-  "Ocean",
-  "Lava",
-  "Heat",
-  "Forest",
-  "Cloud",
-];
-
-export function Palette() {
+export type Props = {
+  n: 1 | 2;
+};
+export function Palette({ n }: Props) {
+  const key = `animation${n}ParamPalette` as const;
   const [config, setConfig] = useConfig();
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setConfig({ animation1gradient: parseInt(ev.target.value) });
+    setConfig({ [key]: parseInt(ev.target.value) });
   };
 
   return (
     <>
-      {PALETTES.map((palette, index) => {
+      {Object.entries(PALETTE_KEYS).map(([palette, value]) => {
         return (
           <label key={palette}>
             <input
               type="radio"
-              value={index}
-              checked={config.animation1gradient === index}
-              name="palette_1"
+              value={value}
+              checked={config[key] === value}
+              name={`palette_${n}`}
               onChange={handleChange}
             />
-            {palette}
+            {configKeyToName(palette)}
           </label>
         );
       })}

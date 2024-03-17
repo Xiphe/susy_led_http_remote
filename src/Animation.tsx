@@ -1,6 +1,4 @@
-import { useConfig } from "./config";
-
-export const ANIMATIONS = ["Plain", "Pictures", "Wobble"] as const;
+import { useConfig, ANIMATIONS, configKeyToName } from "./api";
 
 export function Animation() {
   const [config, setConfig] = useConfig();
@@ -11,17 +9,17 @@ export function Animation() {
 
   return (
     <>
-      {ANIMATIONS.map((animation, index) => {
+      {Object.entries(ANIMATIONS).map(([key, value]) => {
         return (
-          <label key={animation}>
+          <label key={key}>
             <input
               type="radio"
-              value={index}
-              checked={config.animation1 === index}
+              value={value}
+              checked={config.animation1 === value}
               name="animation"
               onChange={handleChange}
             />
-            {animation}
+            {configKeyToName(key)}
           </label>
         );
       })}
