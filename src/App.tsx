@@ -1,12 +1,13 @@
 import { StrictMode } from "react";
+import { RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "./api";
-import { RootView } from "@/views";
+import { router } from "./router";
 
 export default function App() {
   return (
     <StrictMode>
       <ConfigProvider>
-        <RootView />
+        <RouterProvider router={router} />
       </ConfigProvider>
     </StrictMode>
   );

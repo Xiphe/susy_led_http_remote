@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import {
   Animation,
   Brightness,
@@ -6,9 +7,9 @@ import {
   AnimationParams,
 } from "@/components";
 
-export function RootView() {
+export function Root() {
   return (
-    <>
+    <div className="container md:p-8 md:pt-4">
       <Animation />
       <hr />
       <Brightness />
@@ -17,6 +18,7 @@ export function RootView() {
       <hr />
       <AnimationParams n={1} />
       <Palette n={1} />
-    </>
+      <Outlet />
+    </div>
   );
 }
