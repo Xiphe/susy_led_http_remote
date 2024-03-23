@@ -6,10 +6,13 @@ import {
   Palette,
   AnimationParams,
 } from "@/components";
+import { TopNavigation } from "@/components";
 
 export function Root() {
   return (
-    <div className="container md:p-8 md:pt-4">
+    <div className="container py-2 md:p-8 md:pt-4">
+      <TopNavigation />
+
       <Animation />
       <hr />
       <Brightness />
