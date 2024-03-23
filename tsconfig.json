@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
     "lib": ["dom", "es2019"],
+    "baseUrl": ".",
     "strict": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@": ["./src"],
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"]
 }

@@ -22,7 +22,9 @@ jobs:
         run: npm install
 
       - name: ⚙️ Build Project
-        run: npm run build:prod
+        run: |
+          npm run build:js:prod
+          npm run build:css:prod
 
       - name: 🗂️ Upload Build Artifacts
         uses: actions/upload-pages-artifact@v3

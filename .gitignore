@@ -2,3 +2,4 @@ dist
 node_modules
 public/*.js
 public/*.map
+public/*.css
