@@ -1,4 +1,4 @@
-import { useConfig } from "./api";
+import { useConfig } from "../api";
 
 export function Brightness() {
   const [config, setConfig] = useConfig();

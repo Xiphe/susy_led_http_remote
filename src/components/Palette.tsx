@@ -1,4 +1,4 @@
-import { useConfig, PALETTE_KEYS, configKeyToName } from "./api";
+import { useConfig, PALETTE_KEYS, configKeyToName } from "../api";
 
 export type Props = {
   n: 1 | 2;

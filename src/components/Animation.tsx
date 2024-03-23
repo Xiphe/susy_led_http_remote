@@ -1,4 +1,4 @@
-import { useConfig, ANIMATIONS, configKeyToName } from "./api";
+import { useConfig, ANIMATIONS, configKeyToName } from "../api";
 
 export function Animation() {
   const [config, setConfig] = useConfig();

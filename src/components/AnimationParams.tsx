@@ -1,5 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import { useConfig, ANIMATIONS, ANIMATION_PARAMETERS } from "./api";
+import { useConfig, ANIMATIONS, ANIMATION_PARAMETERS } from "../api";
 
 type AnimationKey = keyof typeof ANIMATIONS;
 type Parameter = Exclude<keyof typeof ANIMATION_PARAMETERS, "palette">;

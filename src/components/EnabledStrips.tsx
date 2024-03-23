@@ -5,7 +5,7 @@ import {
   useConfig,
   STRIPS,
   configKeyToName,
-} from "./api";
+} from "../api";
 
 export function EnabledStrips() {
   const [config, setConfig] = useConfig();
