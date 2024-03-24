@@ -3,6 +3,7 @@
     "lib": ["dom", "es2019"],
     "baseUrl": ".",
     "strict": true,
+    "esModuleInterop": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
