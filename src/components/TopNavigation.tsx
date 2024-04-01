@@ -87,7 +87,7 @@ const navigation = [
   },
 ] as const;
 
-export function TopNavigation() {
+export function Navigation() {
   const [sheetOpen, setSheetOpen] = React.useState<boolean>();
   const [currentItem, setCurrentItem] = React.useState<string>();
   const { pathname } = useLocation();

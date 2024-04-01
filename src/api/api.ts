@@ -29,16 +29,25 @@ export function readConfig(config: string) {
   return pairs;
 }
 
+let lastSend: string | null = null;
 export async function sendConfig(...pairs: SelectiveByteConfig) {
+  const data = encodeData(...pairs);
+
+  if (lastSend === data) {
+    return "ok" as const;
+  }
+
   const res = await fetch(`${API_URL}/config`, {
     method: "POST",
     body: encodeData(...pairs),
   });
 
   if (res.status !== 204) {
+    lastSend = null;
     throw new Error(`Failed to send config: ${res.status} ${res.statusText}`);
   }
 
+  lastSend = data;
   return "ok" as const;
 }
 

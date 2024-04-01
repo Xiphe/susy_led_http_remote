@@ -9,6 +9,7 @@ export const PALETTE_OFFSETS = getConfigKeys(
   "OFFSET_CONFIG_PALETTE_"
 );
 export const PALETTE_KEYS = getConfigKeys(BYTE_CONFIG, "PALETTE_KEY_");
+export const PREVIEW = getConfigKeys(BYTE_CONFIG, "PREVIEW_");
 export const ANIMATIONS = getConfigKeys(BYTE_CONFIG, "ANIMATION_");
 export const ANIMATION_PARAMETERS = getConfigKeys(
   BYTE_CONFIG,
