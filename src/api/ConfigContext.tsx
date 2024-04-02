@@ -1,4 +1,4 @@
-import { THROTTLE_DROPPED, createThrottle } from "ichschwoer";
+import { Deferred } from "ichschwoer";
 import {
   PropsWithChildren,
   createContext,
@@ -6,12 +6,12 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { Config, byteConfigToObject, objectToByteConfig } from "./convert";
-import { getConfig, readConfig, sendConfig } from "./api";
+import { getConfig, isSending, readConfig } from "./api";
 import { env } from "../env";
+import { updateConfigThrottled } from "./updateConfigThrottled";
 
 declare global {
   interface Window {
@@ -29,26 +29,19 @@ const ConfigContext = createContext<
 >(null);
 
 export function ConfigProvider(props: PropsWithChildren) {
-  const throttle = useMemo(() => createThrottle(300), []);
-  const discardedUpdates = useRef<Partial<Config>>({});
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState<Config>(() =>
     byteConfigToObject(readConfig(window.config))
   );
-  const updateConfig = useCallback(async (newConfig: Partial<Config>) => {
-    let previousConfig: Config;
-    setConfig((prev) => {
-      previousConfig = prev;
-      return { ...prev, ...newConfig };
-    });
 
-    const res = await throttle.push(async () => {
-      setLoading(true);
-      const update = { ...discardedUpdates.current, ...newConfig };
-      discardedUpdates.current = {};
+  const updateConfig = useCallback((newConfig: Partial<Config>) => {
+    const d = new Deferred();
+    const updateController = async (previousConfig: Config) => {
       try {
-        await sendConfig(...objectToByteConfig(update));
+        await updateConfigThrottled(newConfig, () => {
+          setLoading(true);
+        });
       } catch (err) {
         setConfig(previousConfig);
         if (env !== "production") {
@@ -58,19 +51,26 @@ export function ConfigProvider(props: PropsWithChildren) {
       } finally {
         setLoading(false);
       }
+    };
+
+    setConfig((prev) => {
+      updateController(prev).then(d.resolve, d.reject);
+      return { ...prev, ...newConfig };
     });
 
-    if (res === THROTTLE_DROPPED) {
-      Object.assign(discardedUpdates, newConfig);
-      return;
-    }
+    return d.promise;
   }, []);
   const value = useMemo(
     () => [config, updateConfig, loading] as const,
     [config, updateConfig, loading]
   );
+
   useEffect(() => {
     const i = setInterval(() => {
+      if (isSending) {
+        return;
+      }
+
       getConfig()
         .then((data) => {
           setConfig(byteConfigToObject(readConfig(data)));

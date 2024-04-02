@@ -29,6 +29,8 @@ export function readConfig(config: string) {
   return pairs;
 }
 
+export let isSending = false;
+let t: number | undefined;
 let lastSend: string | null = null;
 export async function sendConfig(...pairs: SelectiveByteConfig) {
   const data = encodeData(...pairs);
@@ -37,10 +39,15 @@ export async function sendConfig(...pairs: SelectiveByteConfig) {
     return "ok" as const;
   }
 
+  clearTimeout(t);
+  isSending = true;
   const res = await fetch(`${API_URL}/config`, {
     method: "POST",
     body: encodeData(...pairs),
   });
+  t = setTimeout(() => {
+    isSending = false;
+  }, 300);
 
   if (res.status !== 204) {
     lastSend = null;
