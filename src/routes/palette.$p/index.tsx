@@ -13,7 +13,7 @@ export function PaletteDesigner() {
 
   return (
     <>
-      <PaletteInput />
+      <PaletteInput p={p} />
       <PreviewSwitch p={p} />
     </>
   );
