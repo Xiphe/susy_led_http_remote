@@ -1,15 +1,15 @@
-import { getConfig, readConfig, sendConfig } from "./api";
+import { ByteConfig, getConfig, readConfig, sendConfig } from "./api";
 import { setBitPackedBools, getBitPackedBool } from "./convert";
 import * as GROUPS from "./configGroups";
 
 async function getByteConfig(key: void, log: true): Promise<void>;
 async function getByteConfig(key: number, log: true): Promise<void>;
-async function getByteConfig(key: void, log?: false): Promise<number[]>;
+async function getByteConfig(key: void, log?: false): Promise<ByteConfig>;
 async function getByteConfig(key: number, log?: false): Promise<number>;
 async function getByteConfig(
   key: number | void,
   log: boolean = false
-): Promise<number | number[] | void> {
+): Promise<number | ByteConfig | void> {
   const byteConfig = readConfig(await getConfig());
   if (key == null) {
     if (!log) {

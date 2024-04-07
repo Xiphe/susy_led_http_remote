@@ -1,7 +1,7 @@
-import { useConfig } from "../api";
+import { useObjectConfig } from "../api";
 
 export function Brightness() {
-  const [config, setConfig] = useConfig();
+  const [config, setConfig] = useObjectConfig();
 
   return (
     <label>

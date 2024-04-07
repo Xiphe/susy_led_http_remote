@@ -1,5 +1,9 @@
 import "./expose";
-export { useConfig, ConfigProvider } from "./ConfigContext";
-export { configKeyToName, getStripEnabled, setStripEnabled } from "./convert";
+export { useConfig, ConfigProvider, useObjectConfig } from "./ConfigContext";
+export {
+  configKeyToName,
+  getStripEnabled,
+  setStripEnabled,
+  sendObjectConfig,
+} from "./convert";
 export * from "./configGroups";
-export * from "./updateConfigThrottled";

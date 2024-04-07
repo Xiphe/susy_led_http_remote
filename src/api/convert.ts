@@ -1,4 +1,4 @@
-import { FullByteConfig, SelectiveByteConfig } from "./api";
+import { sendConfig, type ByteConfig } from "./api";
 import { CONFIG_KEYS } from "./configGroups";
 
 export type Config = Record<keyof typeof CONFIG_KEYS, number>;
@@ -53,7 +53,7 @@ export function getStripEnabled(config: Config, strip: number): boolean {
   return false;
 }
 
-export function byteConfigToObject(byteConfig: FullByteConfig) {
+export function byteConfigToObject(byteConfig: ByteConfig) {
   const mappedConfig: Config = {} as Config;
   for (const key in CONFIG_KEYS) {
     const configKey = CONFIG_KEYS[key as keyof typeof CONFIG_KEYS];
@@ -63,13 +63,13 @@ export function byteConfigToObject(byteConfig: FullByteConfig) {
 }
 
 export function objectToByteConfig(config: Partial<Config>) {
-  const byteConfig: SelectiveByteConfig = [];
+  const byteConfig: ByteConfig = {};
   for (const key in config) {
     const configKey = CONFIG_KEYS[key as keyof typeof CONFIG_KEYS];
     if (configKey == null) {
       throw new Error(`Unknown Config Key: ${key}`);
     }
-    byteConfig.push([configKey, config[key as keyof typeof config] as number]);
+    byteConfig[configKey] = config[key as keyof typeof config] as number;
   }
   return byteConfig;
 }
@@ -103,4 +103,11 @@ export function configKeyToName(key: string, umlauts = false) {
   }
 
   return name;
+}
+
+export async function sendObjectConfig(
+  config: Partial<Config>,
+  onSend?: () => void | Promise<void>
+) {
+  return sendConfig(objectToByteConfig(config), onSend);
 }

@@ -1,7 +1,7 @@
-import { useConfig, ANIMATIONS, configKeyToName } from "../api";
+import { ANIMATIONS, configKeyToName, useObjectConfig } from "../api";
 
 export function Animation() {
-  const [config, setConfig] = useConfig();
+  const [config, setConfig] = useObjectConfig();
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setConfig({ animation1: parseInt(ev.target.value) });

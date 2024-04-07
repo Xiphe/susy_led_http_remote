@@ -1,4 +1,9 @@
-import { PALETTE_KEYS, PREVIEW, updateConfigThrottled, useConfig } from "@/api";
+import {
+  PALETTE_KEYS,
+  PREVIEW,
+  sendObjectConfig,
+  useObjectConfig,
+} from "@/api";
 import { Switch } from "@/components";
 import { useState } from "react";
 import { RouteObject, matchPath, useRouteLoaderData } from "react-router-dom";
@@ -14,7 +19,7 @@ type PreviewSwitchProps = {
 
 export function PreviewSwitch({ p }: PreviewSwitchProps) {
   const { show } = useRouteLoaderData(PREVIEW_SWITCH_ROUTE_ID) as LoaderDate;
-  const [_, setConfig] = useConfig();
+  const [_, setConfig] = useObjectConfig();
   const [preview, setPreview] = useState(() => show);
 
   return (
@@ -76,7 +81,7 @@ export function createPalettePreviewSwitch(
           show = true;
         }
 
-        await updateConfigThrottled({
+        await sendObjectConfig({
           previewMode: getPreviewMode(isPaletteRoute && show, params.p),
         });
 

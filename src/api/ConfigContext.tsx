@@ -8,10 +8,15 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Config, byteConfigToObject, objectToByteConfig } from "./convert";
-import { getConfig, isSending, readConfig } from "./api";
+import {
+  ByteConfig,
+  getConfig,
+  isSending,
+  readConfig,
+  sendConfig,
+} from "./api";
 import { env } from "../env";
-import { updateConfigThrottled } from "./updateConfigThrottled";
+import { Config, byteConfigToObject, objectToByteConfig } from "./convert";
 
 declare global {
   interface Window {
@@ -21,8 +26,8 @@ declare global {
 
 const ConfigContext = createContext<
   | readonly [
-      config: Config,
-      updateConfig: (newConfig: Partial<Config>) => void,
+      byteConfig: ByteConfig,
+      updateConfig: (newConfig: ByteConfig) => void,
       loading: boolean
     ]
   | null
@@ -31,15 +36,15 @@ const ConfigContext = createContext<
 export function ConfigProvider(props: PropsWithChildren) {
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
-  const [config, setConfig] = useState<Config>(() =>
-    byteConfigToObject(readConfig(window.config))
+  const [config, setConfig] = useState<ByteConfig>(() =>
+    readConfig(window.config)
   );
 
-  const updateConfig = useCallback((newConfig: Partial<Config>) => {
+  const updateConfig = useCallback((newConfig: ByteConfig) => {
     const d = new Deferred();
-    const updateController = async (previousConfig: Config) => {
+    const updateController = async (previousConfig: ByteConfig) => {
       try {
-        await updateConfigThrottled(newConfig, () => {
+        await sendConfig(newConfig, () => {
           setLoading(true);
         });
       } catch (err) {
@@ -73,7 +78,7 @@ export function ConfigProvider(props: PropsWithChildren) {
 
       getConfig()
         .then((data) => {
-          setConfig(byteConfigToObject(readConfig(data)));
+          setConfig(readConfig(data));
         })
         .catch((err) => {
           setError(err instanceof Error ? err : new Error(String(err)));
@@ -107,4 +112,19 @@ export function useConfig() {
     throw new Error("useConfig must be used within a ConfigProvider");
   }
   return ctx;
+}
+
+export function useObjectConfig() {
+  const [byteConfig, setByteConfig] = useConfig();
+
+  const objectConfig = useMemo(
+    () => byteConfigToObject(byteConfig),
+    [byteConfig]
+  );
+  const setObjectConfig = useCallback(
+    (update: Partial<Config>) => setByteConfig(objectToByteConfig(update)),
+    [setByteConfig]
+  );
+
+  return [objectConfig, setObjectConfig] as const;
 }

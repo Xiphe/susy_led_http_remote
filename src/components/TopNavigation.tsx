@@ -18,7 +18,7 @@ import {
   SheetClose,
 } from "@/components";
 import { focusStyles } from "./ui/styles";
-import { useConfig } from "@/api";
+import { useObjectConfig } from "@/api";
 import {
   Accordion,
   AccordionContent,
@@ -261,7 +261,7 @@ interface MiniBrightnessProps {
   icons?: boolean;
 }
 function MiniBrightness({ icons }: MiniBrightnessProps) {
-  const [config, setConfig] = useConfig();
+  const [config, setConfig] = useObjectConfig();
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import { useConfig, ANIMATIONS, ANIMATION_PARAMETERS } from "../api";
+import { ANIMATIONS, ANIMATION_PARAMETERS, useObjectConfig } from "../api";
 
 type AnimationKey = keyof typeof ANIMATIONS;
 type Parameter = Exclude<keyof typeof ANIMATION_PARAMETERS, "palette">;
@@ -17,7 +17,7 @@ const ANIMATION_TO_PARAM_NAMES: Partial<
 };
 
 export function AnimationParams(props: { n: 1 | 2 }) {
-  const [config, setConfig] = useConfig();
+  const [config, setConfig] = useObjectConfig();
 
   const currentAnimation = Object.entries(ANIMATIONS).find(
     ([_, v]) => v === config[`animation${props.n}`]

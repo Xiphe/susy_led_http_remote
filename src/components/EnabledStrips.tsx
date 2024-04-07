@@ -2,13 +2,13 @@ import { Fragment } from "react/jsx-runtime";
 import {
   getStripEnabled,
   setStripEnabled,
-  useConfig,
   STRIPS,
   configKeyToName,
+  useObjectConfig,
 } from "../api";
 
 export function EnabledStrips() {
-  const [config, setConfig] = useConfig();
+  const [config, setConfig] = useObjectConfig();
 
   return (
     <>
