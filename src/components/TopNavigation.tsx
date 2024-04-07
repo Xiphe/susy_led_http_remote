@@ -172,7 +172,7 @@ export function Navigation() {
       </Sheet>
 
       <NavigationMenu
-        className="hidden sm:block"
+        className="hidden sm:block grow-0"
         onValueChange={(item) => {
           if (!sheetOpen) {
             setCurrentItem(item);

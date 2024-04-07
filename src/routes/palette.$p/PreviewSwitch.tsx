@@ -1,29 +1,10 @@
 import { PALETTE_KEYS, PREVIEW, updateConfigThrottled, useConfig } from "@/api";
 import { Switch } from "@/components";
 import { useState } from "react";
-import {
-  RouteObject,
-  matchPath,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { RouteObject, matchPath, useRouteLoaderData } from "react-router-dom";
 
 const PALETTE_LOCAL_STORAGE_KEY = "preview-palettes";
 const PREVIEW_SWITCH_ROUTE_ID = "preview-switch-route";
-
-export function PaletteDesigner() {
-  const { p } = useParams();
-
-  if (p !== "a" && p !== "b") {
-    throw new Error("Invalid palette parameter");
-  }
-
-  return (
-    <>
-      <PreviewSwitch p={p} />
-    </>
-  );
-}
 
 type PaletteKey = "a" | "b";
 
@@ -31,7 +12,7 @@ type PreviewSwitchProps = {
   p: PaletteKey;
 };
 
-function PreviewSwitch({ p }: PreviewSwitchProps) {
+export function PreviewSwitch({ p }: PreviewSwitchProps) {
   const { show } = useRouteLoaderData(PREVIEW_SWITCH_ROUTE_ID) as LoaderDate;
   const [_, setConfig] = useConfig();
   const [preview, setPreview] = useState(() => show);

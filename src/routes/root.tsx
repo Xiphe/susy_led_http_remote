@@ -8,7 +8,7 @@ import {
 
 export function Root() {
   return (
-    <>
+    <div>
       <Animation />
       <hr />
       <Brightness />
@@ -17,6 +17,6 @@ export function Root() {
       <hr />
       <AnimationParams n={1} />
       <Palette n={1} />
-    </>
+    </div>
   );
 }
