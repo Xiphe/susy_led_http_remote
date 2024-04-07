@@ -1,3 +1,4 @@
+import { CONFIG_KEYS, PALETTE_CONFIG, PALETTE_OFFSETS, useConfig } from "@/api";
 import { cn } from "@/utils";
 import {
   CSSProperties,
@@ -15,10 +16,15 @@ type PaletteInputProps = {
   p: "a" | "b";
 };
 export function PaletteInput({ p }: PaletteInputProps) {
+  const [config, setConfig] = useConfig();
   const box = useRef<HTMLDivElement | null>(null);
   const resizeObsRef = useRef<ResizeObserver | null>(null);
   const [width, setWidth] = useState<number>(-1);
   const [height, setHeight] = useState<number>(-1);
+  const configStart =
+    p === "a" ? CONFIG_KEYS.palette1Start : CONFIG_KEYS.palette2Start;
+
+  const colorStops = config[configStart + PALETTE_OFFSETS.steps];
 
   return (
     <>
@@ -41,20 +47,40 @@ export function PaletteInput({ p }: PaletteInputProps) {
         }}
         className="grow border-4 border-muted border-b-0 m-4 mb-8 relative"
       >
-        <DraggableColor boxRef={box} boxHeight={height} boxWidth={width} />
+        {Array.from({ length: colorStops }).map((_, i) => (
+          <DraggableColor
+            configStart={configStart}
+            stopNumber={String(i + 1) as any}
+            boxRef={box}
+            boxHeight={height}
+            boxWidth={width}
+            key={i}
+          />
+        ))}
       </div>
     </>
   );
 }
 
 type DraggableColorProps = {
+  configStart: number;
+  stopNumber: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
   boxWidth: number;
   boxHeight: number;
   boxRef: RefObject<HTMLDivElement>;
 };
-function DraggableColor({ boxRef, boxHeight, boxWidth }: DraggableColorProps) {
+function DraggableColor({
+  boxRef,
+  boxHeight,
+  boxWidth,
+  configStart,
+  stopNumber,
+}: DraggableColorProps) {
+  const configKey = configStart + PALETTE_OFFSETS[`step${stopNumber}P`];
+  const [config, setConfig] = useConfig();
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [value, setValue] = useState<number>(0);
+  const value = config[configKey];
+
   const dragRef = useRef<((ev: PointerEvent) => void) | null>(null);
   const stop = useCallback(() => {
     setIsDragging(false);
@@ -79,7 +105,7 @@ function DraggableColor({ boxRef, boxHeight, boxWidth }: DraggableColorProps) {
 
         dragRef.current = createDragHandler({
           $box: boxRef.current,
-          setValue,
+          setValue: (value) => setConfig({ [configKey]: value }),
         });
         window.addEventListener("pointerup", stop);
         window.addEventListener("pointermove", dragRef.current);
@@ -154,7 +180,7 @@ function enableInteractions($el: HTMLElement | null) {
 
 type DragHandlerOpts = {
   $box: HTMLDivElement;
-  setValue: Dispatch<SetStateAction<number>>;
+  setValue: (value: number) => void;
 };
 function createDragHandler({ $box, setValue }: DragHandlerOpts) {
   return (ev: PointerEvent) => {
